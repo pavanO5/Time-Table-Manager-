@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Teacher Login</h2>
+
+        <form method="POST" class="login-form">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                <label for="user_id">{{ form.user_id.label }}</label>
+                {{ form.user_id(class="input-field") }}
+            </div>
+
+            <div class="form-group">
+                <label for="password">{{ form.password.label }}</label>
+                {{ form.password(class="input-field") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.submit(class="btn-submit") }}
+            </div>
+        </form>
+
+        <p class="signup-link">New user? <a href="{{ url_for('teacher_signup') }}">Sign up here</a></p>
+
+        <a class="back-home" href="{{ url_for('home') }}">Back to Home</a>
+    </div>
+</body>
+</html>

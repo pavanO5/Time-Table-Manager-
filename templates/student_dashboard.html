@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .navbar {
+            background-color: #4CAF50;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .dashboard-container {
+            width: 90%;
+            max-width: 1000px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            margin: 30px auto;
+            padding: 30px;
+        }
+
+        h1, h2 {
+            color: #4CAF50;
+            text-align: center;
+        }
+
+        p {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 20px auto;  /* Center the button horizontally */
+            display: block;     /* Ensures it behaves like a block element */
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        .alert {
+            text-align: center;
+            color: #d9534f;
+            font-weight: bold;
+            background-color: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+
+        .status-accepted {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .status-rejected {
+            color: #d9534f;
+            font-weight: bold;
+        }
+
+        .back-button {
+        background-color: #007bff;
+        color: #fff;
+        width: 200px; /* Adjust width as needed */
+        border: none;
+        padding: 12px;
+        border-radius: 5px;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+        margin: 20px auto;  /* Center the button horizontally */
+        display: block;     /* Ensures it behaves like a block element */
+    }
+
+    .back-button:hover {
+        background-color: #0056b3;
+    }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        form {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">Student Dashboard</div>
+
+    <div class="dashboard-container">
+        <h1>Welcome, {{ student.name }}</h1>
+        <p>Registration ID: {{ student.reg_number }}</p>
+
+        <a href="{{ url_for('student_profile') }}" class="button">Edit Profile</a>
+
+        <h2>Select Teacher for Free Periods</h2>
+        <form method="POST" action="{{ url_for('student_dashboard') }}" onsubmit="return validateForm();">
+            {{ meeting_request_form.hidden_tag() }}
+
+            <label for="teacher">Choose a Teacher:</label>
+            {{ meeting_request_form.teacher_id }}
+            <input type="submit" value="Check Free Periods" class="button">
+        </form>
+
+        {% if free_periods %}
+        <h2>Free Periods for Selected Teacher</h2>
+        <table>
+            <tr>
+                <th>Day</th>
+                <th>Free Periods</th>
+            </tr>
+            {% for day, periods in free_periods.items() %}
+            <tr>
+                <td>{{ day }}</td>
+                <td>{{ periods | join(', ') }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div class="alert">No free periods found or teacher not selected yet.</div>
+        {% endif %}
+
+        <h2>Request a Meeting</h2>
+        <form method="POST" action="{{ url_for('request_meeting') }}" onsubmit="return validateForm();">
+            {{ meeting_request_form.hidden_tag() }}
+
+            <label for="teacher_id">Select Teacher:</label>
+            {{ meeting_request_form.teacher_id }}
+
+            <label for="requested_day">Select Day:</label>
+            {{ meeting_request_form.requested_day }}
+
+            <label for="requested_period">Enter Period:</label>
+            {{ meeting_request_form.requested_period }}
+
+            <button type="submit" class="button">Request Meeting</button>
+        </form>
+
+        <h2>Meeting Request Status</h2>
+        <table>
+            <tr>
+                <th>Teacher</th>
+                <th>Day</th>
+                <th>Period</th>
+                <th>Status</th>
+            </tr>
+            {% for request in meeting_requests %}
+            <tr>
+                <td>{{ request[1] }}</td>
+                <td>{{ request[0].requested_day }}</td>
+                <td>{{ request[0].requested_period }}</td>
+                <td class="{% if request[0].status == 'Accepted' %}status-accepted{% elif request[0].status == 'Rejected' %}status-rejected{% else %}status-pending{% endif %}">
+                    {{ request[0].status }}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <a href="{{ url_for('home') }}" class="back-button">Back to Home</a>
+    </div>
+</body>
+</html>

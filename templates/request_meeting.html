@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Request Meeting</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</head>
+<body>
+    <h1>Request a Meeting</h1>
+    <form method="POST" class="meeting-form">
+        {{ form.hidden_tag() }}
+        
+        <div class="form-group">
+            {{ form.student_name.label }} {{ form.student_name() }}
+        </div>
+
+        <div class="form-group">
+            {{ form.student_reg_no.label }} {{ form.student_reg_no() }}
+        </div>
+
+        <div class="form-group">
+            {{ form.teacher_id.label }} {{ form.teacher_id() }}
+        </div>
+
+        <div class="form-group">
+            {{ form.requested_day.label }} {{ form.requested_day() }}
+        </div>
+
+        <div class="form-group">
+            {{ form.requested_period.label }} {{ form.requested_period() }}
+        </div>
+
+        <div class="form-group">
+            {{ form.submit(class="submit-btn") }}
+        </div>
+    </form>
+</body>
+</html>

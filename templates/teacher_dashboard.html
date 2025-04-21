@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .dashboard-container {
+            background-color: #ffffff;
+            width: 90%;
+            max-width: 800px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h1 {
+            color: #1976D2;
+            margin-bottom: 20px;
+        }
+
+        /* Profile Picture */
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #1976D2;
+            margin-bottom: 20px;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .options-list li a {
+            display: inline-block;
+            background-color: #1976D2;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .options-list li a:hover {
+            background-color: #1565c0;
+        }
+
+        .schedule-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        .schedule-table th, .schedule-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .schedule-table th {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        .schedule-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .schedule-table tr:hover {
+            background-color: #e3f2fd;
+        }
+
+        /* Back to Home Button */
+        .back-btn {
+            display: block;
+            background-color: #1976D2;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .back-btn:hover {
+            background-color: #1565c0;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Welcome, {{ teacher.name }}</h1>
+
+        {% if teacher.profile_pic %}
+        <img src="{{ teacher.profile_pic }}" 
+        alt="Profile Picture" 
+        class="profile-pic">
+        {% else %}
+            <p>No profile picture available.</p>
+        {% endif %}
+
+        <h2>Options:</h2>
+        <ul class="options-list">
+            <li><a href="{{ url_for('teacher_profile') }}">Edit Profile</a></li>
+            <li><a href="{{ url_for('manage_meetings', teacher_id=teacher.id) }}">Manage Meetings</a></li>
+        </ul>
+
+        <h2>Your Class Schedule</h2>
+        {% if class_schedule %}
+            <table class="schedule-table">
+                <tr>
+                    <th>Day</th>
+                    <th>Period</th>
+                    <th>Class Details</th>
+                </tr>
+                {% for class_detail in class_schedule %}
+                <tr>
+                    <td>{{ class_detail.day }}</td>
+                    <td>{{ class_detail.period }}</td>
+                    <td>{{ class_detail.class_info }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No timetable available.</p>
+        {% endif %}
+
+        <!-- Back to Home Button -->
+        <a href="{{ url_for('home') }}" class="back-btn">Back to Home Page</a>
+    </div>
+</body>
+</html>

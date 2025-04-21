@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Meetings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1976D2;
+        }
+
+        .meeting-request {
+            background-color: #e3f2fd;
+            border: 2px solid #90caf9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .meeting-request p {
+            margin: 5px 0;
+        }
+
+        .accept-btn, .reject-btn {
+            display: inline-block;
+            padding: 8px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #fff;
+            width: 100px;
+            text-align: center;
+        }
+
+        .accept-btn {
+            background-color: #4CAF50;  /* Green */
+        }
+
+        .reject-btn {
+            background-color: #d32f2f;  /* Red */
+        }
+
+        .accept-btn:hover {
+            background-color: #388E3C;
+        }
+
+        .reject-btn:hover {
+            background-color: #b71c1c;
+        }
+
+        /* Back to Dashboard Button */
+        .back-btn {
+            display: block;
+            background-color: #1976D2;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .back-btn:hover {
+            background-color: #1565c0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Manage Meeting Requests</h1>
+
+        {% for request in requests %}
+            <div class="meeting-request">
+                <p><strong>Student Name:</strong> {{ request.student_name }}</p>
+                <p><strong>Student Reg ID:</strong> {{ request.student_reg_no }}</p>
+                <p><strong>Day:</strong> {{ request.requested_day }}</p>
+                <p><strong>Period:</strong> {{ request.requested_period }}</p>
+                <p><strong>Status:</strong> {{ request.status }}</p>
+
+                {% if request.status == 'Pending' %}
+                    <div>
+                        <a href="{{ url_for('accept_meeting', meeting_id=request.id) }}" class="accept-btn">Accept</a>
+                        <a href="{{ url_for('reject_meeting', meeting_id=request.id) }}" class="reject-btn">Reject</a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <!-- Back to Teacher Dashboard Button -->
+        <a href="{{ url_for('teacher_dashboard') }}" class="back-btn">Back to Teacher Dashboard</a>
+    </div>
+</body>
+</html>

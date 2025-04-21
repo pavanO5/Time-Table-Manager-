@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Free Periods</title>
+</head>
+<body>
+    <h1>Free Periods for {{ teacher.name }}</h1>
+
+    {% if free_periods %}
+        <ul>
+            {% for day, periods in free_periods.items() %}
+                <li>{{ day }}: {{ periods | join(', ') }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No free periods available for this teacher.</p>
+    {% endif %}
+
+    <a href="{{ url_for('student_dashboard') }}">Back to Dashboard</a>
+</body>
+</html>
